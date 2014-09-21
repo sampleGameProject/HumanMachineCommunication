@@ -1,9 +1,0 @@
-C:\Users\admin\Documents\GitHub\CryptographyLabs\FitsLawTest\FitsLawTest\bin\Debug\FitsLawTest.exe.config
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\bin\Debug\FitsLawTest.exe.config
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\bin\Debug\FitsLawTest.exe
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\bin\Debug\FitsLawTest.pdb
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\obj\Debug\FitsLawTest.Properties.Resources.resources
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\obj\Debug\FitsLawTest.csproj.GenerateResource.Cache
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\obj\Debug\FitsLawTest.exe
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\obj\Debug\FitsLawTest.pdb
-C:\Users\admin\Documents\GitHub\HumanMachineCommunication\FitsLawTest\FitsLawTest\obj\Debug\FitsLawTest.Form1.resources
