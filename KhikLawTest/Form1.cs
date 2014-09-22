@@ -19,10 +19,30 @@ namespace KhikLawTest
         Button correctButton;
         int[] labelValues = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
+        Color defaultColor;
+        Font defaultFont;
+        
+        Color[] testColors;
+        Font[] testFonts;
+        MutableInt testColorCounter;
+
+        bool complexTest;        
+
         public Form1()
         {
             InitializeComponent();
             buttons = new Button[]{test0,test1,test2,test3,test4,test5,test6,test7,test8};
+
+            testColors = new Color[] { Color.White, Color.Black, Color.DimGray, Color.Green, Color.Red };
+            testFonts = new Font[] 
+            { 
+                new Font(new FontFamily("Arial"),   11, FontStyle.Underline), 
+                new Font(new FontFamily("Courier"), 10, FontStyle.Underline), 
+                new Font(new FontFamily("Times"),   12, FontStyle.Underline)
+            };
+
+            defaultColor = test0.ForeColor;
+            defaultFont = test0.Font;
         }
 
 
@@ -52,22 +72,49 @@ namespace KhikLawTest
 
             int correctButtonIndex = rand.Next(buttonsCount);
             int correctValue = values[correctButtonIndex];
-            correctValueLabel.Text = correctValue.ToString();
+            correctButton = buttons[correctButtonIndex];
+            correctButton.MouseClick += OnCorrectButtonClick;
 
-            for (int i = 0; i < 9; i++)
+
+            if (!complexTest)
             {
-                if (i < buttonsCount)
+                correctValueLabel.Text = correctValue.ToString();
+
+                for (int i = 0; i < 9; i++)
                 {
-                    buttons[i].Show();
-                    buttons[i].Text = values[i].ToString();
+                    if (i < buttonsCount)
+                    {
+                        buttons[i].Show();
+                        buttons[i].Text = values[i].ToString();
+                    }
+                    else
+                        buttons[i].Hide();
                 }
-                else                
-                    buttons[i].Hide();
+            }
+            else
+            {
+                correctValueLabel.Hide();
+
+                for (int i = 0; i < 9; i++)
+                {
+                    if (i < buttonsCount)
+                    {
+                        buttons[i].Show();
+                        buttons[i].Text = "Click me";
+                    }
+                    else
+                        buttons[i].Hide();
+
+                    buttons[i].Font = defaultFont;
+                    buttons[i].ForeColor = defaultColor;
+                }
+
+                correctButton.ForeColor = testColors[testColorCounter.Value];
+                correctButton.Font = testFonts[rand.Next(testFonts.GetLength(0))];
             }
 
             
-            correctButton = buttons[correctButtonIndex];
-            correctButton.MouseClick += OnCorrectButtonClick;
+            
         }
 
 
@@ -82,7 +129,30 @@ namespace KhikLawTest
         {
             StartTest(new KhikDecisionTest(new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }));
         }
+
+
+        void OnColorTestIterationChanged(int newValue)
+        {
+            StartTest(new KhikDecisionTest(new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }));
+        }
  
+
+        void OnColorTestCompleted()
+        {
+            MessageBox.Show("Комплексный тест завершен");
+            complexTest = false;
+        }
+
+        private void StartComplexTestClick(object sender, EventArgs e)
+        {
+            complexTest = true;
+            testColorCounter = new MutableInt(new int[] { 0, 1, 2, 3, 4 });
+            testColorCounter.OnValueChanged += OnColorTestIterationChanged;
+            testColorCounter.OnMutationComplete += OnColorTestCompleted;
+
+            StartTest(new KhikDecisionTest(new int[] { 2, 3, 4, 5, 6, 7, 8, 9 }));
+        }
+        
         public void StartTest(KhikDecisionTest test)
         {
             startButton.Hide();
@@ -96,11 +166,31 @@ namespace KhikLawTest
 
         private void OnTestCompleted(List<TryResult<TimeSpan>> testResults)
         {
-            Utils.SaveResults<TimeSpan>("Результаты теста.txt", testResults, s => s.ToString(@"s\.fff"));
-            MessageBox.Show("Тест завершен. Результаты сохранены");
-            startButton.Show();
+            Utils.SaveResults<TimeSpan>(GetTestResultsFileName(), testResults, s => s.ToString(@"s\.fff"));
+
+            if(!complexTest)
+            {
+                MessageBox.Show("Тест завершен. Результаты сохранены");
+                startButton.Show();
+            }
+            else
+            {
+                testColorCounter.Mutate();
+            }
+           
         }
 
+        private string GetTestResultsFileName()
+        {
+            if(complexTest)
+            {
+                return string.Format("Результаты комплексного теста. Итерация № {0}.txt", testColorCounter.Value + 1);
+            }
+            else
+            {
+                return "Результаты простого теста.txt";
+            }
+        }
 
 
 
